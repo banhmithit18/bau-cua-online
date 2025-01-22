@@ -58,7 +58,9 @@ createRoomButton.addEventListener("click", () => {
   }
   socket.emit("createRoom", roomID);
   socket.on("roomCreated", function (roomID) {
-    currentRoomID = roomID;
+    if(currentRoomID == ''){
+      currentRoomID = roomID;
+    }
     //show main element
     roomElement.style.cssText = "display:none !important";
     mainElement.style.display = "flex";
@@ -89,9 +91,15 @@ joinRoomButton.addEventListener("click", () => {
 
 //receive data from server after join room
 socket.on("roomJoined", function (room) {
-  currentRoomID = room.roomID;
-  currentPlayerID = room.player.id;
-  currentPlayerName = room.player.name;
+  if(currentRoomID == ''){
+    currentRoomID = room.roomID;
+  }
+  if(currentPlayerID == ''){
+    currentPlayerID = room.player.id;
+  }
+  if(currentPlayerName == ''){
+    currentPlayerName = room.player.name;
+  }
   //show main element
   roomElement.style.cssText = "display:none !important";
   mainElement.style.display = "flex";
