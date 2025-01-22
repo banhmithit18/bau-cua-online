@@ -1,0 +1,10 @@
+{
+    "name": "bau-cua-online",
+    "version": "0.0.1",
+    "description": "my bau cua website",
+    "type": "module",
+    "dependencies": {
+        "express": "^4.21.2",
+        "socket.io": "^4.8.1"
+    }
+}
