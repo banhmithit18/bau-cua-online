@@ -11,6 +11,9 @@ const joinRoomButton = document.getElementById("joinRoom");
 const roomElement = document.getElementById("room");
 const mainElement = document.getElementById("main");
 const diceElements = document.querySelectorAll(".dice");
+const roomIDInput = document.getElementById("roomID");
+const roomPasswordInput = document.getElementById("roomPassword");
+const container = document.getElementById("floating-icons-container");
 
 // Mảng hình ảnh xúc xắc
 const diceImages = [
@@ -21,6 +24,8 @@ const diceImages = [
   "images/ga.jpg", // Gà
   "images/nai.jpg", // Nai
 ];
+
+const icons = ["images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png", "images/icons/icon1.png"];
 
 // Mặt xúc xắc và góc xoay tương ứng (trục X, Y)
 const faceAngles = [
@@ -51,19 +56,27 @@ socket.on("notify", function (notification) {
 
 //when create room you are bank aka nhà cái
 createRoomButton.addEventListener("click", () => {
-  var roomID = document.getElementById("roomID").value.trim();
-  if (!roomID) {
-    alert("Vui lòng nhập ID phòng");
+  const roomID = roomIDInput.value.trim();
+  const password = roomPasswordInput.value.trim();
+
+  if (!(roomID && password)) {
+    alert("Vui lòng nhập ID và mật khẩu phòng");
     return false;
   }
-  socket.emit("createRoom", roomID);
+
+  socket.emit("createRoom", { roomID, password });
+
   socket.on("roomCreated", function (roomID) {
-    if(currentRoomID == ''){
+    if (currentRoomID == "") {
       currentRoomID = roomID;
     }
     //show main element
     roomElement.style.cssText = "display:none !important";
     mainElement.style.display = "flex";
+
+    //remove animation
+    document.querySelectorAll(".floating-icon").forEach((e) => e.remove());
+
     //bank should not have right to bet
     document.getElementById("betButton").style.display = "none";
   });
@@ -72,10 +85,12 @@ createRoomButton.addEventListener("click", () => {
 //join room
 joinRoomButton.addEventListener("click", () => {
   //validate
-  var roomID = document.getElementById("roomID").value.trim();
+  const roomID = roomIDInput.value.trim();
+  const password = roomPasswordInput.value.trim();
   var playerName = document.getElementById("playerName").value.trim();
-  if (!roomID) {
-    alert("Vui lòng nhập ID phòng");
+
+  if (!(roomID && password)) {
+    alert("Vui lòng nhập ID và mật khẩu phòng");
     return false;
   }
   if (!playerName) {
@@ -83,7 +98,7 @@ joinRoomButton.addEventListener("click", () => {
     return false;
   }
   //send data to server
-  socket.emit("joinRoom", { room: roomID, player: playerName });
+  socket.emit("joinRoom", { roomID, playerName, password });
 
   //player should not have right to shacke dice
   document.getElementById("shake-button").style.display = "none";
@@ -91,18 +106,22 @@ joinRoomButton.addEventListener("click", () => {
 
 //receive data from server after join room
 socket.on("roomJoined", function (room) {
-  if(currentRoomID == ''){
+  if (currentRoomID == "") {
     currentRoomID = room.roomID;
   }
-  if(currentPlayerID == ''){
+  if (currentPlayerID == "") {
     currentPlayerID = room.player.id;
   }
-  if(currentPlayerName == ''){
+  if (currentPlayerName == "") {
     currentPlayerName = room.player.name;
   }
   //show main element
   roomElement.style.cssText = "display:none !important";
   mainElement.style.display = "flex";
+
+  //remove animation
+  document.querySelectorAll(".floating-icon").forEach((e) => e.remove());
+
   //add player to billboard
   addPlayerToTable(room.player);
 });
@@ -183,8 +202,8 @@ socket.on("updateBank", (bank) => {
   //update bank point
   scoreTable.innerHTML = "";
   const row = scoreTable.insertRow();
-  row.insertCell(0).textContent = "Nhà cái"
-  row.insertCell(1).textContent = bank|| 0;
+  row.insertCell(0).textContent = "Nhà cái";
+  row.insertCell(1).textContent = bank || 0;
 });
 
 function convertChoiceName(name) {
@@ -214,5 +233,97 @@ function createDice() {
     `;
   });
 }
+
+function createFloatingIcons() {
+  icons.forEach((icon) => {
+    const img = document.createElement("img");
+    img.src = icon;
+    img.className = "floating-icon";
+
+    // Vị trí ngẫu nhiên ban đầu
+    const startX = Math.random() * 90 + "vw"; // Vị trí ban đầu của icon (x)
+    const startY = Math.random() * 90 + "vh"; // Vị trí ban đầu của icon (y)
+
+    // Tạo vị trí ngẫu nhiên cho chuyển động
+    const randomX = (Math.random() * 2 - 1) * 100 + "vw"; // Giá trị ngẫu nhiên cho hướng X
+    const randomY = (Math.random() * 2 - 1) * 100 + "vh"; // Giá trị ngẫu nhiên cho hướng Y
+
+    // Đặt vị trí ban đầu
+    img.style.top = startY;
+    img.style.left = startX;
+
+    // Đặt các giá trị này vào custom properties để sử dụng trong @keyframes
+    img.style.setProperty("--x", randomX);
+    img.style.setProperty("--y", randomY);
+
+    // Thêm icon vào container
+    container.appendChild(img);
+
+    // Cập nhật vị trí liên tục
+    moveIcon(img);
+  });
+}
+
+// Hàm tạo các icon trôi nổi
+function createFloatingIcons() {
+  icons.forEach((icon) => {
+    const img = document.createElement("img");
+    img.src = icon;
+    img.className = "floating-icon";
+
+    // Vị trí ngẫu nhiên ban đầu
+    const startX = Math.random() * 90 + "vw"; // Vị trí ban đầu của icon (x)
+    const startY = Math.random() * 90 + "vh"; // Vị trí ban đầu của icon (y)
+
+    // Đặt vị trí ban đầu cho icon
+    img.style.top = startY;
+    img.style.left = startX;
+
+    // Thêm icon vào container
+    container.appendChild(img);
+
+    // Bắt đầu di chuyển icon
+    moveIcon(img);
+  });
+}
+
+// Hàm để di chuyển icon liên tục và thay đổi hướng khi chạm vào cạnh
+function moveIcon(icon) {
+  let xDirection = Math.random() < 0.5 ? 1 : -1; // Hướng di chuyển ngẫu nhiên theo trục X
+  let yDirection = Math.random() < 0.5 ? 1 : -1; // Hướng di chuyển ngẫu nhiên theo trục Y
+
+  let speedX = Math.random() * 2 + 1; // Tốc độ di chuyển ngẫu nhiên theo trục X
+  let speedY = Math.random() * 2 + 1; // Tốc độ di chuyển ngẫu nhiên theo trục Y
+
+  const step = () => {
+    const rect = icon.getBoundingClientRect();
+    let left = rect.left + xDirection * speedX;
+    let top = rect.top + yDirection * speedY;
+
+    // Nếu chạm vào cạnh trái hoặc phải, đảo hướng X
+    if (left <= 0 || left + rect.width >= window.innerWidth) {
+      xDirection *= -1;
+    }
+
+    // Nếu chạm vào cạnh trên hoặc dưới, đảo hướng Y
+    if (top <= 0 || top + rect.height >= window.innerHeight) {
+      yDirection *= -1;
+    }
+
+    // Cập nhật vị trí icon
+    icon.style.left = left + "px";
+    icon.style.top = top + "px";
+
+    // Gọi lại hàm để tiếp tục di chuyển
+    requestAnimationFrame(step);
+  };
+
+  // Bắt đầu di chuyển
+  step();
+}
+
+// Khởi tạo icon khi trang web đã sẵn sàng
+document.addEventListener("DOMContentLoaded", createFloatingIcons);
+
 // Khởi tạo xúc xắc
 createDice();

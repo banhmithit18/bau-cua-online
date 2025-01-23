@@ -13,34 +13,40 @@
 </head>
 
 <body id="body">
-  <div class="container-fluid fill-height">
+  <div class="container-fluid fill-height" id="floating-icons-container">
     <div class="d-flex justify-content-center align-items-center vh-100" id="room">
       <div class="col align-self-center text-center pb-5">
-        <div class="form-row align-items-center">
-          <div class="col-auto mx-auto">
-            <div class="form-row align-items-center">
-              <!-- Room ID Input -->
-              <div class="col">
-                <label class="sr-only" for="roomID">Nhập ID phòng</label>
-                <input type="text" class="form-control mb-2" id="roomID" placeholder="Nhập ID phòng">
-              </div>
-              <!-- User Name Input -->
-              <div class="col">
-                <label class="sr-only" for="playerName">Nhập tên người chơi</label>
-                <input type="text" class="form-control mb-2" id="playerName" placeholder="Nhập tên người chơi">
-              </div>
+        <div class="card p-4 mx-auto shadow-lg" style="max-width: 600px; background-color: #2C2C2C; border-radius: 12px; z-index: 999;">
+          <div class="form-row mb-3">
+            <!-- Room ID Input -->
+            <div class="col">
+              <label for="roomID" class="form-label font-weight-bold text-light">ID Phòng</label>
+              <input type="text" class="form-control bg-dark text-light border-secondary" id="roomID" placeholder="Nhập ID phòng">
             </div>
-            <!-- Buttons -->
-            <div class="text-center mt-2">
-              <button id="createRoom" type="button" class="my-btn">Tạo phòng</button>
-              <button id="joinRoom" type="button" class="my-btn">Zô phòng</button>
+            <!-- Password -->
+            <div class="col">
+              <label for="roomPassword" class="form-label font-weight-bold text-light">Mật Khẩu</label>
+              <input type="password" class="form-control bg-dark text-light border-secondary" id="roomPassword" placeholder="Nhập mật khẩu">
             </div>
-          </div>          
+          </div>
+          <div class="form-row mb-4">
+            <!-- User Name Input -->
+            <div class="col">
+              <label for="playerName" class="form-label font-weight-bold text-light">Tên Người Chơi</label>
+              <input type="text" class="form-control bg-dark text-light border-secondary" id="playerName" placeholder="Nhập tên người chơi">
+            </div>
+          </div>
+          <!-- Buttons -->
+          <div class="d-flex justify-content-center">
+            <button id="createRoom" type="button" class="my-btn btn-lg mx-2">Tạo Phòng</button>
+            <button id="joinRoom" type="button" class="my-btn btn-lg mx-2">Zô Phòng</button>
+          </div>
         </div>
       </div>
+      
     </div>
-    
-    <div class="row align-items-center fill-height" id="main" style="display: none;">
+
+    <div class="row align-items-center fill-height" id="main" style="display: none;  z-index: 999;">
       <div class="col-3 align-self-start align-items-center pt-5">
         <div id="scoreboard">
           <h3>Bảng Điểm</h3>

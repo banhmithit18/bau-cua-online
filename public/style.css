@@ -1,13 +1,17 @@
-
 html {
   height: 100%;
 }
 #body {
-  background-color: #1E1E1E;
-  color: #FFFFFF;
+  background-color: #1e1e1e;
+  background-size: cover; /* <------ */
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #ffffff;
   font-family: Arial, sans-serif;
   height: 100%;
   min-height: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
 .container-fluid {
@@ -16,7 +20,7 @@ html {
 }
 .body-film {
   height: 100%;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 .block-film {
   min-height: 100%;
@@ -34,7 +38,6 @@ html {
   perspective: 62.5rem; /* Hiệu ứng 3D */
   margin-bottom: 4.5rem;
   justify-content: center; /* Center horizontally in grid */
-
 }
 
 /* Xúc xắc */
@@ -53,7 +56,7 @@ html {
   width: 100%;
   height: 100%;
   background-color: dimgray;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,12 +72,24 @@ html {
 }
 
 /* Vị trí các mặt xúc xắc */
-.dice .front { transform: rotateY(0deg) translateZ(6.25rem); }
-.dice .back { transform: rotateY(180deg) translateZ(6.25rem); }
-.dice .left { transform: rotateY(-90deg) translateZ(6.25rem); }
-.dice .right { transform: rotateY(90deg) translateZ(6.25rem); }
-.dice .top { transform: rotateX(90deg) translateZ(6.25rem); }
-.dice .bottom { transform: rotateX(-90deg) translateZ(6.25rem); }
+.dice .front {
+  transform: rotateY(0deg) translateZ(6.25rem);
+}
+.dice .back {
+  transform: rotateY(180deg) translateZ(6.25rem);
+}
+.dice .left {
+  transform: rotateY(-90deg) translateZ(6.25rem);
+}
+.dice .right {
+  transform: rotateY(90deg) translateZ(6.25rem);
+}
+.dice .top {
+  transform: rotateX(90deg) translateZ(6.25rem);
+}
+.dice .bottom {
+  transform: rotateX(-90deg) translateZ(6.25rem);
+}
 
 /* Bảng điểm */
 #scoreboard {
@@ -82,21 +97,21 @@ html {
   text-align: center;
 }
 
-table{
-  color: #FFFFFF !important;
+table {
+  color: #ffffff !important;
 }
 
-.modal{
+.modal {
   color: black !important;
 }
 
-.modal table{
+.modal table {
   color: black !important;
 }
 
 .my-btn {
-  background-color: #FF4500;
-  color: #FFF;
+  background-color: #ff4500;
+  color: #fff;
   border: none;
   padding: 0.5rem 1.25rem;
   font-size: 1.1rem;
@@ -107,5 +122,37 @@ table{
 }
 
 .my-btn:hover {
-  background-color: #FF6347;
+  background-color: #ff6347;
+}
+.card {
+  background-color: #2c2c2c;
+  border: 1px solid #444; /* Subtle border for separation */
+}
+
+.form-control {
+  background-color: #333; /* Slightly lighter than the card */
+  color: #f8f9fa; /* Light text */
+  border: 1px solid #555; /* Darker border for inputs */
+}
+
+input:focus,
+input.form-control:focus {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+#floating-icons-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Đảm bảo icon không tràn ra ngoài */
+}
+
+.floating-icon {
+  position: absolute;
+  width: 50px; /* Kích thước icon */
+  height: 50px;
 }
